@@ -46,7 +46,7 @@ A single effect needs no plan: `.venv/bin/python scripts/fx.py orbit <video> <ou
 | 3 | `locked-on` | Corner brackets snap onto your face, the camera follows you | `zoom` (default 1.35), `text` (tag) |
 | 4 | `orbit` | Your reels circle your head: in front at the bottom, behind at the top | `images`, `count`, `speed`, `size` |
 | 5 | `lean-in` | A fast punch-in on one word | `zoom` (default 1.45, max 2), `speed` |
-| 6 | `backdrop-word` | A giant word drops in behind you | `text`, `color` (hex), `font` (`bold` or `serif`) |
+| 6 | `backdrop-word` | A giant word drops in behind you | `text`, `color` (hex), `font` (`bold` or `serif`), `type=1` (types itself letter by letter instead), `gap` (seconds per letter, default 0.18) |
 | 7 | `spotlight` | Kills the lights, keeps you lit | `text` (glowing word behind you), `color`, `push` |
 | 8 | `the-bill` | Prints your instructions like a receipt into the wall above your head | `text` (lines joined with `\|`) |
 | 9 | `moody` | A moody colour grade | `grade` (`moody`, `bw`, `warm`, `cool`, `pop`) |
@@ -99,5 +99,5 @@ Aliases work too: `bill`, `to-do`, `follow`, `stamp`, `countdown`, `cover`, `rai
 - Never cover the face. Everything either goes behind the person or avoids the face by itself; if a check frame still shows text over the face, move it (`x`, `y`) or shorten the text.
 - Effects run in the order listed. Put camera effects (`locked-on`, `lean-in`, `spotlight`) first when they overlap others.
 - Zoom never goes past 2x, so the video stays sharp.
-- This skill adds visuals only. Sound effects and captions are up to the user (CapCut works well).
+- This skill adds visuals only, with one exception: a typewriter sound for `backdrop-word` with `type=1`. Render first, then run `.venv/bin/python scripts/typewriter.py <rendered.mp4> <final.mp4> --start <effect start> --letters <word length>` (same `--gap` if you changed it; `--volume`, `--no-bell`). Other sound effects and captions are up to the user (CapCut works well).
 - These are starter versions. Be honest about that if the user compares them to a reel they saw.

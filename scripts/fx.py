@@ -303,8 +303,19 @@ def fx_lean_in(c, e):
 def fx_backdrop_word(c, e):
     word = e.o.get('text', 'CLAUDE')
     im = cached(e, 'w', lambda: fit_text(word, c.W * 0.94, e.o.get('font', 'bold'), fill=rgb(e.o.get('color'), CREAM), shadow=10))
-    k = ease_back(c.lt / 0.42)
     y_end = c.fy - c.fw * 1.05
+    if e.o.get('type'):
+        # Typewriter: one more letter every `gap` seconds, already in place (no drop)
+        gap = float(e.o.get('gap', 0.18)); n = min(len(word), int(c.lt / gap) + 1)
+        def cut():
+            kind, size = e.o.get('font', 'bold'), 400
+            while size > 10 and font(kind, size).getlength(word) > c.W * 0.94: size = int(size * 0.92)
+            f = font(kind, size); x0 = int(size * 0.2 + 25) + 4 - f.getbbox(word)[0]
+            return [im.crop((0, 0, int(x0 + f.getlength(word[:i])), im.height)) for i in range(1, len(word) + 1)]
+        part = cached(e, 'cut', cut)[n - 1]
+        place(c, part, c.W / 2 * 0.6 + c.fx * 0.4 - (im.width - part.width) / 2, y_end, alpha=clamp((e.d - c.lt) / 0.2), behind=True)
+        return
+    k = ease_back(c.lt / 0.42)
     y = -im.height + (y_end + im.height) * k
     place(c, im, c.W / 2 * 0.6 + c.fx * 0.4, y, alpha=clamp((e.d - c.lt) / 0.2), behind=True)
 
